@@ -1,68 +1,34 @@
-import VueRouter from "vue-router";
-import Home from "../view/Home.vue";
-import person from "@/view/person";
-import news from "@/view/news";
-import knowledge from "@/view/knowledge";
-import detail from "@/view/detail";
-import login from "@/view/login";
-import reg from "@/view/register";
-import knowledgeDetail from "@/view/knowledgeDetail";
-import chinaList from "@/view/chinaList";
-import greeceList from "@/view/greeceList";
-import japanList from "@/view/japanList";
-import shop from "@/view/shop";
+import { createRouter, createWebHistory } from 'vue-router'
+import one from '../views/one.vue'
+import two from "@/views/two.vue";
+import three from "@/views/three.vue";
+import four from "@/views/four.vue";
 
-const router = new VueRouter({
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    //配置路由的路径
     {
-      path: "/",
-      component: Home,
+      path: '/',
+      name: 'one',
+      component: one
     },
     {
-      path: "/person",
-      component: person,
+      path: '/two',
+      name: 'two',
+      component: two
     },
     {
-      path: "/news",
-      component: news,
+      path: '/three',
+      name: 'three',
+      component: three
     },
     {
-      path: "/knowledge",
-      component: knowledge,
+      path: '/four',
+      name: 'four',
+      component: four
     },
-    {
-      path: "/detail/:id",
-      component: detail,
-    },
-    {
-      path: "/knowledgeDetail/:id",
-      component: knowledgeDetail,
-    },
-    {
-      path: "/login",
-      component: login,
-    },
-    {
-      path: "/register",
-      component: reg,
-    },
-    {
-        path: "/chinaList",
-        component: chinaList,
-    },
-    {
-        path: "/greeceList",
-        component: greeceList,
-    },
-    {
-        path: "/japanList",
-        component: japanList,
-    },
-    {
-        path: "/shop",
-        component: shop,
-    },
-  ],
-});
-export default router;
+  ]
+})
+
+export default router

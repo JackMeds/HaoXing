@@ -1,17 +1,12 @@
-import Vue from 'vue'
+import './assets/main.css'
+
+import { createApp } from 'vue'
 import App from './App.vue'
-import Vant from 'vant'
+import router from './router'
+import axios from "axios";
+import Vant from 'vant';
 import 'vant/lib/index.css'
-import VueRouter from 'vue-router';//使用插件
-import axios from 'axios'
-import router from './router/index'
-Vue.config.productionTip = false
 
-
-Vue.prototype.$axios = axios
-Vue.use(Vant)  //全局引入
-Vue.use(VueRouter)
-new Vue({
-  render: h => h(App),
-  router:router
-}).$mount('#app')
+const app = createApp(App)
+app.config.globalProperties.$axios = axios;
+app.use(router).use(Vant).mount('#app')
