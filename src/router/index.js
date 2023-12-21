@@ -4,6 +4,7 @@ import three from "@/views/three.vue";
 import four from "@/views/four.vue";
 
 //NTS
+import NTS_Index from "@/views/NTS/NTS_Index.vue";
 import NTS_Home from "@/views/NTS/NTS_Home.vue";
 import NTS_Create from "@/views/NTS/NTS_Create.vue";
 import NTS_My from "@/views/NTS/NTS_My.vue";
@@ -20,27 +21,32 @@ const router = createRouter({
       component: one
     },
     {
-      path: '/NTS_Home',
-      name: 'NTS_Home',
-      component: NTS_Home,
+      path: '/NTS',
+      name: 'NTS_Index',
+      component: NTS_Index,
       children: [
         {
-          path: '/NTS_Create',
+          path: '',
+          name: 'NTS_Home',
+          component: NTS_Home,
+        },
+        {
+          path: 'NTS_Create',
           name: 'NTS_Create',
           component: NTS_Create,
         },
         {
-          path: '/NTS_My',
+          path: 'NTS_My',
           name: 'NTS_My',
           component: NTS_My,
         },
         {
-          path: '/NTS_Search',
+          path: 'NTS_Search',
           name: 'NTS_Search',
           component: NTS_Search,
         },
         {
-          path: '/NTS_Play',
+          path: 'NTS_Play',
           name: 'NTS_Play',
           component: NTS_Play,
         },
