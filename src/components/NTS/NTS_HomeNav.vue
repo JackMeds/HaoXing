@@ -1,22 +1,22 @@
-<template>
-  <van-search v-model="searchText" placeholder="请输入有声小说名" @clearable="true" />
+<template lang="html">
+  <van-search v-model="searchText" placeholder="请输入有声小说名" @search="onSearch()"/>
   <!-- 大按钮菜单 -->
   <div class="button-menu">
-    <div class="button-menu-item">
+    <div class="button-menu-item" @click="toCreate()">
       <img src="/NTS_Images/add.png" alt="">
       <div>
         <p class="largeText">开始制作</p>
         <p class="smallText">有声小说</p>
       </div>
     </div>
-    <div class="button-menu-item">
+    <div class="button-menu-item" @click="toPlay()">
       <img src="/NTS_Images/homePlay.png" alt="">
       <div>
         <p class="largeText">播放</p>
         <p class="smallText">有声小说</p>
       </div>
     </div>
-    <div class="button-menu-item">
+    <div class="button-menu-item" @click="toMy()">
       <img src="/NTS_Images/books.png" alt="">
       <div>
         <p class="largeText">我的</p>
@@ -27,9 +27,37 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { showToast } from 'vant';
 
+const router = useRouter();
+
 const searchText = ref('');
+
+const onSearch = () => {
+  //跳转到搜索页面并携带搜索结果
+  router.push({
+    path: '/NTS/NTS_Search',
+    query: {
+      searchText: searchText.value
+    }
+  });
+}
+
+const toCreate = () => {
+  //路由跳转到制作页面
+  router.push('/NTS/NTS_Create');
+}
+
+const toPlay = () => {
+  //路由跳转到播放页面
+  router.push('/NTS/NTS_Play');
+}
+
+const toMy = () => {
+  //路由跳转到我的页面
+  router.push('/NTS/NTS_My');
+}
 
 </script>
 <style scoped lang="scss">

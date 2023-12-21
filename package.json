@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@futuremeng/vue-audio-player": "^1.5.11",
     "axios": "^1.6.2",
     "vant": "^4.8.1",
     "vue": "^3.3.11",
