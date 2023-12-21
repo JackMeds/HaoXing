@@ -1,8 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import one from '../views/one.vue'
-import two from "@/views/two.vue";
 import three from "@/views/three.vue";
 import four from "@/views/four.vue";
+
+//NTS
+import NTS_Home from "@/views/NTS/NTS_Home.vue";
+import NTS_Create from "@/views/NTS/NTS_Create.vue";
+import NTS_My from "@/views/NTS/NTS_My.vue";
+import NTS_Search from "@/views/NTS/NTS_Search.vue";
+import NTS_Play from "@/views/NTS/NTS_Play.vue";
 
 
 const router = createRouter({
@@ -14,9 +20,31 @@ const router = createRouter({
       component: one
     },
     {
-      path: '/two',
-      name: 'two',
-      component: two
+      path: '/NTS_Home',
+      name: 'NTS_Home',
+      component: NTS_Home,
+      children: [
+        {
+          path: '/NTS_Create',
+          name: 'NTS_Create',
+          component: NTS_Create,
+        },
+        {
+          path: '/NTS_My',
+          name: 'NTS_My',
+          component: NTS_My,
+        },
+        {
+          path: '/NTS_Search',
+          name: 'NTS_Search',
+          component: NTS_Search,
+        },
+        {
+          path: '/NTS_Play',
+          name: 'NTS_Play',
+          component: NTS_Play,
+        },
+      ]
     },
     {
       path: '/three',
