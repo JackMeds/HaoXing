@@ -23,7 +23,6 @@
     </van-tabs>
 </template>
 <script setup>
-import { defineProps } from 'vue';
 import { ref } from 'vue';
 
 // Define props to receive the bookList from the parent component
