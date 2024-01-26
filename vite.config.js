@@ -14,7 +14,14 @@ export default defineConfig({
     }
   },
   server: {
-    port: 8082
+    port: 8082,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000', // 目标 API
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+    }
   },
   css: {
     preprocessorOptions: {
@@ -22,7 +29,7 @@ export default defineConfig({
         additionalData: `@import "./src/styles/variables.scss";`
       }
     }
-  }
+  },
 })
 
 

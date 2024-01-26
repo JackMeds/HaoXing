@@ -53,7 +53,10 @@
     </van-popup>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { getCurrentInstance, ref } from 'vue';
+
+const instance = getCurrentInstance();
+const axios = instance.appContext.config.globalProperties.$axios;
 
 // 声音列表
 var SoundList = [
@@ -183,10 +186,21 @@ const inputKey = () => {
     showInputKey.value = true;
 };
 
-const AIidentify = () => {
-    
-    highlightContent.value = ['的'];
-    normalNovel.value = false;
+const AIidentify = async () => {
+    try {
+        const response = await axios.get('/NTS/handlenovel', {
+            params: {
+                content: novel.value.content,
+                key: APIKey.value
+            }
+        });
+        console.log(response);
+        highlightContent.value = ['的'];
+        normalNovel.value = false;
+    } catch (error) {
+        console.log(error);
+        normalNovel.value = false;
+    }
 };
 
 </script>
