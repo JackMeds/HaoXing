@@ -188,7 +188,7 @@ const inputKey = () => {
 
 const AIidentify = async () => {
     try {
-        const response = await axios.get('/NTS/handlenovel', {
+        const response = await axios.post('/NTS/handlenovel', {
             params: {
                 content: novel.value.content,
                 key: APIKey.value
