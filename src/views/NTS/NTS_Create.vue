@@ -32,6 +32,19 @@
             <van-highlight :keywords="highlightContent" :source-string="novel.content" highlight-class="custom-class" />
         </van-tab>
         <van-tab title="角色声线选择（AI）" class="roles">
+            <div class="noRole" v-if="!showRoleList">
+                <p>请先进行AI识别，才能分析出小说角色</p>
+            </div>
+            <van-cell-group v-if="showRoleList">
+                <van-cell is-link v-for="(item, index) in PreProcess.Roles" :value="item.voiceName" size="large" style="padding: 15px 20px;"
+                    @click="setVoice(item.RoleID)">
+                    <template #title>
+                        <span class="custom-title">{{ item.RoleName }}</span>
+                        <van-tag type="primary"></van-tag>
+                    </template>
+
+                </van-cell>
+            </van-cell-group>
         </van-tab>
     </van-tabs>
     <div class="Bottom_Bar">
@@ -51,12 +64,50 @@
         <van-picker title="选择全文默认声线" :columns="DefaultVoiceColumns" @confirm="onConfirmDefaultVoice"
             @cancel="onCancelDefaultVoice" style="background-color: rgb(255, 255, 255);" />
     </van-popup>
+    <van-popup v-model:show="showVoice" overlay position="bottom" round class="DefaultVoiceList">
+        <van-picker title="选择角色声线" :columns="VoiceColumns" @confirm="onConfirmVoice"
+            @cancel="onCancelVoice" style="background-color: rgb(255, 255, 255);" />
+    </van-popup>
+    <div v-show="showLoading" class="loading">
+        <div class="littleBox"><van-loading size="24px" color="#000" vertical>加载中...</van-loading></div>
+    </div>
 </template>
 <script setup>
 import { getCurrentInstance, ref } from 'vue';
 
 const instance = getCurrentInstance();
 const axios = instance.appContext.config.globalProperties.$axios;
+
+//预处理数据
+const PreProcess = ref({
+    "Roles": [
+        {
+            "RoleID": "1",
+            "RoleName": "秦诚"
+        },
+        {
+            "RoleID": "2",
+            "RoleName": "王煊"
+        }
+    ],
+    "content": [
+        {
+            "RoleID": "1",
+            "RoleName": "秦诚",
+            "text": "这种旧时代的东西，你真的练成了？"
+        },
+        {
+            "RoleID": "2",
+            "RoleName": "王煊",
+            "text": "按照就旧时代的说法，我这些不算什么。"
+        },
+        {
+            "RoleID": "1",
+            "RoleName": "秦诚",
+            "text": "你别拿过去来比较，我压根就没相信过，事实上，那些记载许多都早已被证伪。"
+        }
+    ]
+});
 
 // 声音列表
 var SoundList = [
@@ -179,6 +230,8 @@ const onCancelDefaultVoice = () => {
 
 //AI identify
 const showInputKey = ref(false);
+const showLoading = ref(false);
+const showRoleList = ref(false);
 
 const APIKey = ref('');
 
@@ -187,20 +240,59 @@ const inputKey = () => {
 };
 
 const AIidentify = async () => {
+    if (!APIKey.value) {
+        showInputKey.value = true;
+        return;
+    }
+    showLoading.value = true;
     try {
         const response = await axios.post('/NTS/handlenovel', {
-            params: {
-                content: novel.value.content,
-                key: APIKey.value
-            }
+            content: novel.value.content,
+            APIKey: APIKey.value
         });
-        console.log(response);
-        highlightContent.value = ['的'];
+        showLoading.value = false;
+        showRoleList.value = true;
+        console.log(response.data);
+        PreProcess.value = response.data.data;
+        response.data.data.content.forEach((elm) => {
+            highlightContent.value.push(elm.text);
+        });
         normalNovel.value = false;
     } catch (error) {
         console.log(error);
         normalNovel.value = false;
     }
+};
+
+//Set Voice
+const showVoice = ref(false);
+const VoiceColumns = [];
+const temporaryID = ref('');
+
+const setVoice = (RoleID) => {
+    SoundList.forEach((elm) => {
+        VoiceColumns.push({
+            text: elm.name,
+            value: elm.voice
+        });
+    });
+    showVoice.value = true;
+    temporaryID.value = RoleID;
+};
+const onConfirmVoice = ({ selectedValues }) => {
+    showVoice.value = false;
+    PreProcess.value.Roles.forEach((elm) => {
+        if (elm.RoleID === temporaryID.value) {
+            elm.voice = selectedValues[0];
+            elm.voiceName = SoundList.find(elm => elm.voice === selectedValues[0])?.name || '';
+        }
+    });
+    temporaryID.value = '';
+    console.log(PreProcess.value);
+};
+
+const onCancelVoice = () => {
+    showVoice.value = false;
 };
 
 </script>
@@ -319,11 +411,20 @@ const AIidentify = async () => {
 
 .tabs {
     margin: 10px;
-    margin-bottom: 70px;
+    margin-bottom: 80px;
 
     .novel {
         font-size: 16px;
         line-height: 20px;
+    }
+
+    .noRole {
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        color: #333333;
     }
 }
 
@@ -335,6 +436,8 @@ const AIidentify = async () => {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: #ffffff;
+    padding-top: 10px;
 
     .left {
         margin: 0 5px 10px 10px;
@@ -369,9 +472,34 @@ const AIidentify = async () => {
             color: #333333;
         }
     }
+}
 
-    .DefaultVoiceList {
-        height: 300px;
+.DefaultVoiceList {
+    height: 300px;
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #000000;
+    z-index: 999;
+
+    .littleBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>
