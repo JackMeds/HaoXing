@@ -3,7 +3,7 @@
         <van-tab title="全部">
             <div class="book-list">
                 <div class="book-list-item" v-for="item in bookList" :key="item.id">
-                    <div class="image-wrapper" @click="toPlay(item.title)">
+                    <div class="image-wrapper" @click="toPlay({ title: item.title, NovelImg: item.img })">
                         <img :src="item.img" alt="">
                     </div>
                     <p>{{ item.title }}</p>
@@ -44,7 +44,7 @@ onMounted(() => {
     });
 });
 
-const toPlay = (title) => {
+const toPlay = ({title, NovelImg}) => {
     router.push({
         path: '/NTS/NTS_Play',
         query: {
@@ -52,6 +52,7 @@ const toPlay = (title) => {
             chapterID: 0,
             novelName: title,
             chapterName: "全一章",
+            NovelImg: NovelImg
         }
     });
 }

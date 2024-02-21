@@ -227,7 +227,8 @@ const novel = ref(
         chapterID: 0,
         name: '',
         chapter: '',
-        content: ''}
+        content: ''
+    }
 );
 
 
@@ -416,6 +417,7 @@ const showFinish = () => {
                     chapterID: novel.value.chapterID,
                     novelName: novel.value.name,
                     chapterName: novel.value.chapter,
+                    NovelImg: '/NTS_Images/book1.png'
                 }
             });
         })

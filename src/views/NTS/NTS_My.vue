@@ -6,12 +6,12 @@
     </van-nav-bar>
     <van-cell v-for="item in bookList">
         <template #icon>
-            <div class="image-wrapper" @click="toPlay(item.title)">
+            <div class="image-wrapper" @click="toPlay({title:item.title, img:item.img})">
                 <img :src="item.img" alt="">
             </div>
         </template>
         <template #title>
-            <div class="title" @click="toPlay(item.title)">
+            <div class="title" @click="toPlay({title:item.title, img:item.img})">
                 <span class="BookName">{{ item.title }}</span>
                 <span>全一章</span>
                 <span>{{ item.updatedAt }}</span>
@@ -71,7 +71,7 @@ onMounted(() => {
     });
 });
 
-const toPlay = (title) => {
+const toPlay = ({title, img}) => {
     router.push({
         path: '/NTS/NTS_Play',
         query: {
@@ -79,6 +79,7 @@ const toPlay = (title) => {
             chapterID: 0,
             novelName: title,
             chapterName: "全一章",
+            NovelImg: img
         }
     });
 }

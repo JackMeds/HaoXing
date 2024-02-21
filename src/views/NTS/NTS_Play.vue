@@ -6,7 +6,7 @@
     </van-nav-bar>
     <div class="infor-box">
         <div class="image-wrapper">
-            <img src="/NTS_Images/book1.png" alt="">
+            <img :src="NovelImg" alt="">
         </div>
         <div class="right-wrapper">
             <div class="text-wrapper">
@@ -32,7 +32,77 @@
     </div>
     <van-tabs v-model:active="active" animated>
         <van-tab title="原文" class="pre-line">{{ novel }}</van-tab>
-        <van-tab title="评论">评论</van-tab>
+        <van-tab title="评论">
+            <div class="commentInput">
+                <van-field class="commentInputArea" v-model="commentInputData" rows="2" autosize type="textarea"
+                    maxlength="50" placeholder="发布一条友善的评论吧" show-word-limit />
+            </div>
+            <div class="commentBtnContainer">
+                <div class="commentBtn" @click="publishComment()">
+                    <p>发表评论</p>
+                </div>
+            </div>
+            <div class="commentList">
+                <div class="commentItem" v-for="(item, index) in commentList">
+                    <!-- 评论 -->
+                    <div class="commentMain">
+                        <div class="commentItemLeft">
+                            <div class="userPic">
+                                <img src="/NTS_Images/customer-center.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="commentItemRight">
+                            <div class="userName">
+                                <p>{{ item.user.nickName }}</p>
+                            </div>
+                            <div class="commentTime">
+                                <p>{{ item.createdAt }}</p>
+                            </div>
+                            <div class="commentText">
+                                <p>{{ item.content }}</p>
+                            </div>
+                            <div class="function">
+                                <div class="reply" @click="doReply(index)">
+                                    <img src="/NTS_Images/comment.png" alt="">
+                                    <span>回复</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="writeReply" v-if="item.showReplyInput">
+                        <div class="commentInput">
+                            <van-field class="commentInputArea" v-model="replyInputData" rows="2" autosize type="textarea"
+                                maxlength="50" placeholder="发布一条友善的评论吧" show-word-limit />
+                        </div>
+                        <div class="commentBtnContainer">
+                            <div class="commentBtn" @click="publishReply(index)">
+                                <p>回复</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 回复 -->
+                    <div class="replyList">
+                        <div class="replyItem" v-for="replyItem in item.replies">
+                            <div class="replyItemLeft">
+                                <div class="userPic">
+                                    <img src="/NTS_Images/customer-center.svg" alt="">
+                                </div>
+                            </div>
+                            <div class="replyItemRight">
+                                <div class="userName">
+                                    <p>{{ replyItem.user.nickName }}</p>
+                                </div>
+                                <div class="replyText">
+                                    <p>{{ replyItem.content }}</p>
+                                </div>
+                                <div class="function">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </van-tab>
     </van-tabs>
 
     <div class="bottom-placeholder"></div>
@@ -55,6 +125,7 @@ let novelID = router.currentRoute.value.query.novelID;
 let chapterID = router.currentRoute.value.query.chapterID;
 let novelName = router.currentRoute.value.query.novelName;
 let chapterName = router.currentRoute.value.query.chapterName;
+let NovelImg = router.currentRoute.value.query.NovelImg;
 let novel = ref('');
 
 //获取小说
@@ -177,7 +248,7 @@ const like = () => {
                 soundBookId: soundBookId.value
             }).then(res => {
                 console.log(likeCount.value);
-                likeCount.value+=1;
+                likeCount.value += 1;
                 console.log(likeCount.value);
             }).catch(err => {
                 console.log(err);
@@ -192,7 +263,7 @@ const like = () => {
                 soundBookId: soundBookId.value
             }).then(res => {
                 console.log(likeCount.value);
-                likeCount.value-=1;
+                likeCount.value -= 1;
                 console.log(likeCount.value);
             }).catch(err => {
                 console.log(err);
@@ -226,7 +297,7 @@ const collect = () => {
                 soundBookId: soundBookId.value
             }).then(res => {
                 console.log(collectCount.value);
-                collectCount.value+=1;
+                collectCount.value += 1;
                 console.log(collectCount.value);
             }).catch(err => {
                 console.log(err);
@@ -241,7 +312,7 @@ const collect = () => {
                 soundBookId: soundBookId.value
             }).then(res => {
                 console.log(collectCount.value);
-                collectCount.value-=1;
+                collectCount.value -= 1;
                 console.log(collectCount.value);
             }).catch(err => {
                 console.log(err);
@@ -251,7 +322,108 @@ const collect = () => {
         console.log(err);
     });
 }
+//查询评论
+const commentList = ref([]);
+const getComment = async () => {
+    try {
+        const res = await axios.get(`/NTS/getCommentList`, {
+            params: {
+                novelName: novelName
+            }
+        })
+        console.log(res.data);
+        // 遍历评论列表，为每个评论对象添加showReplyInput属性并初始化为false
+        commentList.value = res.data.data.map(comment => {
+            comment.showReplyInput = false;
+            // // 在回复列表中也为每个回复对象添加showReplyInput属性并初始化为false
+            // comment.replies.forEach(reply => {
+            //     reply.showReplyInput = false;
+            // });
+            // 假设 item.updatedAt 是您要格式化的时间字符串
+            const isoString = comment.createdAt;
+            console.log(isoString); // 输出ISO字符串
+            // 将ISO字符串转换为Date对象
+            const date = new Date(isoString);
 
+            // 格式化日期和时间
+            // 您可以根据需要调整以下格式
+            const formattedDate = date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const formattedTime = date.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            // 将日期和时间组合在一起
+            const displayString = `${formattedDate} ${formattedTime}`;
+            comment.createdAt = displayString // 输出格式化后的日期时间
+
+            return comment;
+        });
+        console.log(commentList.value);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+onMounted(() => {
+    getComment();
+})
+
+//发布评论
+const commentInputData = ref("");
+const publishComment = async () => {
+    try {
+        const res = await axios.post(`/NTS/createComment`, {
+            novelName: novelName,
+            usersid: 1,
+            content: commentInputData.value
+        });
+        console.log(res.data);
+        commentInputData.value = "";
+        getComment();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+//打开回复输入框
+const replyInputData = ref("");
+const showReplyInput = ref(false);
+const doReply = (index) => {
+    // 遍历评论列表，将除了当前点击的评论外的其他评论的showReplyInput属性设置为false
+    commentList.value.forEach((comment, i) => {
+        if (i != index) {
+            comment.showReplyInput = false;
+        }
+    });
+    // 将当前点击的评论的showReplyInput属性设置为true
+    commentList.value[index].showReplyInput = !commentList.value[index].showReplyInput;
+}
+//发布回复
+const publishReply = async (index) => {
+    try {
+        if (replyInputData.value == "") {
+            alert("回复内容不能为空");
+            return;
+        } else {
+            const res = await axios.post(`/NTS/createReply`, {
+                commentId: commentList.value[index].id,
+                usersid: 1,
+                content: replyInputData.value
+            });
+            console.log(res.data);
+            replyInputData.value = "";
+            getComment();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 </script>
 <style scoped lang="scss">
 .pre-line {
@@ -354,6 +526,274 @@ const collect = () => {
     .audio-player {
         margin: 0 auto;
         width: 90%;
+    }
+}
+
+
+.commentInput {
+    width: 95%;
+    margin: 0 auto;
+
+    .commentInputArea {
+        width: 100%;
+    }
+}
+
+.commentBtnContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    .commentBtn {
+        width: 60px;
+        height: 30px;
+        background-color: #efb336;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+
+        p {
+            font-size: 14px;
+            color: #ffffff;
+        }
+    }
+}
+
+
+.commentBtnContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    .commentBtn {
+        margin: 10px;
+        width: 100%;
+        height: 30px;
+        background-color: #efb336;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+
+        p {
+            font-size: 14px;
+            color: #ffffff;
+        }
+    }
+}
+
+.commentList {
+    width: 100%;
+
+    .commentItem {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .commentMain {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+
+        .commentItemLeft {
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .userPic {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        .commentItemRight {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .userName {
+                p {
+                    font-size: 16px;
+                    color: #333333;
+                }
+            }
+
+            .commentTime {
+                p {
+                    font-size: 12px;
+                    color: #999999;
+                }
+            }
+
+            .commentText {
+                p {
+                    font-size: 14px;
+                    color: #333333;
+                }
+            }
+
+            .function {
+                display: flex;
+                justify-content: space-between;
+
+                .like {
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    span {
+                        font-size: 12px;
+                        color: #999999;
+                    }
+                }
+
+                .reply {
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    span {
+                        font-size: 12px;
+                        color: #999999;
+                    }
+                }
+            }
+        }
+
+        .writeReply {
+            width: 100%;
+
+            .replyInput {
+                width: 100%;
+
+                .replyInputArea {
+                    width: 100%;
+                    height: 100px;
+                }
+            }
+
+            .replyBtnContainer {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+
+                .replyBtn {
+                    width: 60px;
+                    height: 30px;
+                    background-color: #efb336;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 6px;
+
+                    p {
+                        font-size: 14px;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.replyList {
+    border-top: 1px solid #cacaca;
+    width: 80%;
+    margin-left: 15%;
+
+    .replyItem {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+
+        .replyItemLeft {
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .userPic {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        .replyItemRight {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .userName {
+                p {
+                    font-size: 16px;
+                    color: #333333;
+                }
+            }
+
+            .replyTime {
+                p {
+                    font-size: 12px;
+                    color: #999999;
+                }
+            }
+
+            .replyText {
+                p {
+                    font-size: 14px;
+                    color: #333333;
+                }
+            }
+
+            .function {
+                display: flex;
+                justify-content: space-between;
+
+                .like {
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    span {
+                        font-size: 12px;
+                        color: #999999;
+                    }
+                }
+            }
+        }
     }
 }
 </style>
