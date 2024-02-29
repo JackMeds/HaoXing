@@ -16,56 +16,74 @@
         src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
       />
       <div class="right">
-        <div class="name">游客123</div>
-        <van-button class="loginbtn" color="#7232df" round plain @click="login"
+        <div class="name" v-if="loggedIn">{{ username }}</div>
+        <van-button v-else class="loginbtn" color="#7232df" round plain @click="login"
           >点击登录</van-button
         >
-        <span class="person" @click="person">个人主页</span>
       </div>
     </div>
     <!-- 功能 -->
     <div style="background-color:  #dcdada; padding: 15px 0;">
       <van-cell-group inset >
-      <van-cell title="账户" value="余额" />
-      <van-cell title="收藏" value="" />
-      <van-cell title="订阅" value="" />
-      <van-cell title="阅读记录" value="" label="" />
-    </van-cell-group>
+        <van-cell title="账户" value="余额" />
+        <van-cell title="收藏" value="" />
+        <van-cell title="订阅" value="" />
+        <van-cell title="阅读记录" value="" label="" />
+      </van-cell-group>
     </div>
     <div style="background-color:  #dcdada; padding: 15px 0;">
       <van-cell-group inset >
-      <van-cell title="我在读" value="" label="今年暂无在读的书" />
-    </van-cell-group>
+        <van-cell title="我在读" value="" label="今年暂无在读的书" />
+      </van-cell-group>
     </div>
     <div style="background-color:  #dcdada; padding: 15px 0;">
       <van-cell-group inset >
-      <van-cell title="读完" value="" label="今年暂无读完的书" />
-    </van-cell-group>
+        <van-cell title="读完" value="" label="今年暂无读完的书" />
+      </van-cell-group>
     </div>
     <div style="background-color:  #dcdada; padding: 15px 0;">
       <van-cell-group inset >
-      <van-cell title="阅读勋章" value="" is-link/>
-    </van-cell-group>
+        <van-cell title="退出登录" @click="unlogin" value="" is-link/>
+      </van-cell-group>
     </div>
   </div>
-
   <bar></bar>
 </template>
-  <script setup>
+
+<script setup>
 import bar from "../components/bar.vue";
 import router from "@/router";
-const login = () => {
-  // console.log("登录");
-  router.push('/login')
+import { ref } from "vue";
 
-};
-const setting = () =>{
-  router.push('/setting')
+const loggedIn = ref(false);
+const username = ref("");
+
+// 页面加载时检查本地存储中是否存在登录状态
+if (window.sessionStorage.getItem("user")) {
+  loggedIn.value = true;
+  username.value = window.sessionStorage.getItem("user");
 }
-</script>
-    
-<style scoped >
 
+const unlogin = () => {
+  window.sessionStorage.removeItem("user");
+  loggedIn.value = false;
+  router.push("/");
+};
+
+const login = () => {
+  router.push("/login");
+};
+
+const setting = () => {
+  router.push("/setting");
+};
+
+const person = () => {
+  router.push("/person");
+};
+</script>
+
+<style scoped>
 .name {
   line-height: 24px;
   font-size: 24px;

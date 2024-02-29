@@ -20,8 +20,7 @@
         />
       </van-swipe-item>
     </van-swipe>
-    <!-- 分类 -->
-    <van-tabs v-model:active="type" >
+    <van-tabs v-model:active="type">
       <van-tab
         v-for="(item, id) in typelist"
         :key="id"
@@ -32,7 +31,7 @@
             @click="detail(i.id)"
             v-for="(i, index) in bookList"
             :key="index"
-            v-show="i.time==item.time"
+            v-show="i.time == item.time"
           >
             <van-image
               width="100"
@@ -86,18 +85,18 @@ const detail = (id) => {
   console.log(id)
   router.push("/detail/"+id);
 };
-const getInfo = () => {
-  axios
-    .get("http://localhost:3000/tag")
-    .then((res) => {
-      console.log(res);
-      typelist = res.data;
-      console.log(typelist);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+
+const getInfo = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/tag')
+    typelist = response.data
+    if (typelist.length > 0) {
+      type.value = typelist[0].id
+    }
+  } catch (error) {
+    console.error('Error fetching typelist:', error)
+  }
+}
 </script>
   
 <style scoped>
