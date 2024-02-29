@@ -1,5 +1,5 @@
 <template lang="html">
-  <van-search v-model="searchText" placeholder="请输入有声小说名" @search="onSearch()" />
+  <!-- <van-search v-model="searchText" placeholder="请输入有声小说名" @search="onSearch()" /> -->
   <!-- 轮播图 -->
   <van-swipe :autoplay="3000" lazy-render>
     <van-swipe-item v-for="item in mySwipe" :key="item.image">
