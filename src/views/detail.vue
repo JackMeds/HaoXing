@@ -30,7 +30,7 @@
     <div style="padding-left: 26px; font-size: 18px; line-height: 200%">
       {{ list.detail }}
       <div style="text-align: center;" >
-        <van-button round type="primary" @click=shoucang(list.id)>收藏</van-button>
+        <van-button round type="primary" @click=shoucang()>收藏</van-button>
         <van-button round type="primary" @click="read(list.id)">开始阅读</van-button>
       </div>
     </div>
@@ -73,8 +73,35 @@ export default {
     read(id){
         this.$router.push('/read')
     },
-    shoucagn(id){
+    shoucang(){
+      const userid = window.sessionStorage.getItem("userid");
+      const shopid = this.id;
 
+      if (userid && shopid) {
+        // 添加userid和shopid的有效性验证
+        this.$axios
+          .post("http://localhost:3000/gouwucar/", {
+            userid: userid,
+            shopid: this.$route.params.id,
+          })
+          .then((res) => {
+            if ((res.data = "useid")) {
+              // 如果成功加入购物车
+              this.dialogMessage = "添加成功！";
+            } else {
+              this.dialogMessage = "添加失败！";
+            }
+          })
+          .catch((err) => {
+            console.log("加入购物车失败");
+          })
+          .finally(() => {
+            this.showDialog = true;
+          });
+      } else {
+        this.dialogMessage = "您还未登录！";
+        this.showDialog = true;
+      }
     },
     onClickLeft() {
       this.$router.go(-1);
@@ -91,3 +118,5 @@ export default {
   line-height: 25px;
 }
 </style>
+
+
