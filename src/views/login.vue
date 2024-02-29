@@ -14,7 +14,10 @@
             type="password"
             required
           ></van-field>
-          <van-button type="primary" native-type="submit">登录</van-button>
+          <div style="text-align: center;">
+          <van-button  type="primary" native-type="submit">登录</van-button>
+          
+          </div>
         </form>
       </van-tab>
       <van-tab title="注册">
@@ -30,7 +33,9 @@
             type="password"
             required
           ></van-field>
+          <div style="text-align: center;">
           <van-button type="primary" native-type="submit">注册</van-button>
+          </div>
         </form>
       </van-tab>
     </van-tabs>
