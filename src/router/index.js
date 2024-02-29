@@ -2,6 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import one from '../views/one.vue'
 import three from "@/views/three.vue";
 import four from "@/views/four.vue";
+import setting from "@/views/setting.vue";
+import login from "@/views/login.vue";
+import search from "@/views/search.vue";
+import detail from '@/views/detail.vue'
+import read from "@/views/read.vue"
 
 //NTS
 import NTS_Index from "@/views/NTS/NTS_Index.vue";
@@ -61,6 +66,32 @@ const router = createRouter({
       path: '/four',
       name: 'four',
       component: four
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: setting
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: search
+    },
+    {
+      path: '/detail/:id',
+      name: 'detail',
+      component: detail
+    },
+    {
+      // path: '/detail/:id',
+      path: '/read',
+      name: 'read',
+      component: read
     },
   ]
 })
