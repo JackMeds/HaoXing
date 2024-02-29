@@ -32,7 +32,8 @@
                 <p>请先选择小说</p>
             </div>
             <p v-if="normalNovel" class="pre-line">{{ novel.content ? novel.content : "" }}</p>
-            <van-highlight class="pre-line" :keywords="highlightContent" :source-string="novel.content" highlight-class="custom-class" />
+            <van-highlight class="pre-line" :keywords="highlightContent" :source-string="novel.content"
+                highlight-class="custom-class" />
         </van-tab>
         <van-tab title="角色声线选择（AI）" class="roles">
             <div class="noRole" v-if="!showRoleList">
@@ -295,9 +296,9 @@ const AIidentify = async () => {
         showRoleList.value = true;
         console.log(response.data);
         console.log(response.data.data);
-        console.log(response.data.data.content);
-        PreProcess.value = response.data.data;
-        response.data.data.content.forEach((elm) => {
+        console.log(JSON.parse(response.data.data).content);
+        PreProcess.value = JSON.parse(response.data.data);
+        JSON.parse(response.data.data).content.forEach((elm) => {
             highlightContent.value.push(elm.text);
         });
         normalNovel.value = false;
@@ -446,11 +447,16 @@ const reset = () => {
 .pre-line {
     white-space: pre-wrap;
 }
+
 .ellipsis-text {
-  width: 200px; /* 或者您希望的固定宽度 */
-  white-space: nowrap; /* 防止文本换行 */
-  overflow: hidden; /* 隐藏超出容器的内容 */
-  text-overflow: ellipsis; /* 当文本超出容器范围时显示省略号 */
+    width: 200px;
+    /* 或者您希望的固定宽度 */
+    white-space: nowrap;
+    /* 防止文本换行 */
+    overflow: hidden;
+    /* 隐藏超出容器的内容 */
+    text-overflow: ellipsis;
+    /* 当文本超出容器范围时显示省略号 */
 }
 
 .Menu_Container {

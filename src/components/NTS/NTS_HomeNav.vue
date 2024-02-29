@@ -78,7 +78,16 @@ const toCreate = () => {
 
 const toPlay = () => {
   //路由跳转到播放页面
-  router.push('/NTS/NTS_Play');
+  router.push({
+        path: '/NTS/NTS_Play',
+        query: {
+            novelID: 1,
+            chapterID: 0,
+            novelName: "[凌晨] 交错",
+            chapterName: "全一章",
+            NovelImg: "/NTS_Images/book2.png"
+        }
+    });
 }
 
 const toMy = () => {
