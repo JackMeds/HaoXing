@@ -1,5 +1,13 @@
 <template lang="html">
-  <van-search v-model="searchText" placeholder="请输入有声小说名" @search="onSearch()"/>
+  <van-search v-model="searchText" placeholder="请输入有声小说名" @search="onSearch()" />
+  <!-- 轮播图 -->
+  <van-swipe :autoplay="3000" lazy-render>
+    <van-swipe-item v-for="item in mySwipe" :key="item.image">
+      <img :src="item.image" />
+      <span>{{item.title}}</span>
+    </van-swipe-item>
+  </van-swipe>
+
   <!-- 大按钮菜单 -->
   <div class="button-menu">
     <div class="button-menu-item" @click="toCreate()">
@@ -12,7 +20,7 @@
     <div class="button-menu-item" @click="toPlay()">
       <img src="/NTS_Images/homePlay.png" alt="">
       <div>
-        <p class="largeText">播放</p>
+        <p class="largeText">最近</p>
         <p class="smallText">有声小说</p>
       </div>
     </div>
@@ -44,6 +52,25 @@ const onSearch = () => {
   });
 }
 
+const mySwipe = ref([
+  {
+    image: '/NTS_Images/book0.png',
+    title: '今日推荐'
+  },
+  {
+    image: '/NTS_Images/book1.png',
+    title: '今日推荐'
+  },
+  {
+    image: '/NTS_Images/book2.png',
+    title: '今日推荐'
+  },
+  {
+    image: '/NTS_Images/book3.png',
+    title: '今日推荐'
+  }
+]);
+
 const toCreate = () => {
   //路由跳转到制作页面
   router.push('/NTS/NTS_Create');
@@ -62,8 +89,30 @@ const toMy = () => {
 </script>
 <style scoped lang="scss">
 .van-search {
-  margin:10px 10px 0 10px;
+  margin: 10px 10px 0 10px;
 }
+
+.van-swipe{
+  margin: 10px 10px 0 10px;
+  height: 200px;
+  border-radius: 6px;
+  .van-swipe-item{
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    span{
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: #ffffff;
+      text-shadow: #000000 0px 0px 10px;
+    }
+  }
+}
+
 .button-menu {
   display: flex;
   height: 123px;
@@ -124,8 +173,9 @@ const toMy = () => {
     margin-right: 18px;
   }
 }
+
 /* 隐藏滚动条 */
 .button-menu::-webkit-scrollbar {
-    display: none; /* 针对 Chrome, Safari, Opera */
-}
-</style>
+  display: none;
+  /* 针对 Chrome, Safari, Opera */
+}</style>
