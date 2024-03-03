@@ -2,7 +2,8 @@
   <div>
     <van-tabs v-model:active="active">
       <van-tab title="书架">
-        <van-grid :column-num="3">
+        <div v-if="loggedIn">
+          <van-grid :column-num="3">
           <van-grid-item
             @click="detail(i.id)"
             v-for="(i, index) in bookList"
@@ -16,6 +17,10 @@
             <div>{{ i.title }}</div>
           </van-grid-item>
         </van-grid>
+        </div>
+       <div v-else>
+        <van-empty  description="请先登录" />
+       </div>
       </van-tab>
       <van-tab title="我的收藏">内容 2</van-tab>
       <van-tab title="我的订阅">内容 3</van-tab>
@@ -29,11 +34,12 @@ import bar from "../components/bar.vue";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import axios from "axios";
+import router from "@/router";
 
 const bookList = ref([]);
 const active = ref(0);
-const detail = () => {
-  console.log(1111);
+const detail = (id) => {
+  router.push('detail/'+id)
 };
 
 const getInfo = async () => {
@@ -44,7 +50,10 @@ const getInfo = async () => {
     console.log(err);
   }
 };
-
+const loggedIn = ref(false);
+if (window.sessionStorage.getItem("user")) {
+  loggedIn.value = true;
+}
 onMounted(async () => {
   await getInfo(); // 在组件加载时立即获取数据
   const userid = window.sessionStorage.getItem("userid");

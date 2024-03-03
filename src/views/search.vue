@@ -19,7 +19,7 @@
         thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
       />
     </div>
-    <div v-else>不存在</div>
+    <div v-else><van-empty image="search" description="没有找到想要的" /></div>
   </div>
 </template>
 

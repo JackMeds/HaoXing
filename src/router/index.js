@@ -7,6 +7,8 @@ import login from "@/views/login.vue";
 import search from "@/views/search.vue";
 import detail from '@/views/detail.vue'
 import read from "@/views/read.vue"
+import news from "@/views/news.vue"
+import records from "@/views/records.vue"
 
 //NTS
 import NTS_Index from "@/views/NTS/NTS_Index.vue";
@@ -88,10 +90,20 @@ const router = createRouter({
       component: detail
     },
     {
+      path: '/news',
+      name: 'news',
+      component: news
+    },
+    {
       // path: '/detail/:id',
       path: '/read',
       name: 'read',
       component: read
+    },
+    {
+      path: '/records',
+      name: 'records',
+      component: records
     },
   ]
 })

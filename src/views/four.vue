@@ -2,7 +2,7 @@
   <div style="background-color: #dcdada;">
     <div style="display: flex; margin: 10px">
       <!-- 消息 -->
-      <van-icon size="30" name="chat-o" badge="9" />
+      <van-icon size="30" name="chat-o" badge="9" @click="news"/>
       <!-- 设置 -->
       <van-icon size="30" style="margin-left: auto" name="setting-o" @click="setting" />
     </div>
@@ -25,10 +25,10 @@
     <!-- 功能 -->
     <div style="background-color:  #dcdada; padding: 15px 0;">
       <van-cell-group inset >
-        <van-cell title="账户" value="余额" />
+        <van-cell title="账户" :value="wallet" />
         <van-cell title="收藏" value="" />
         <van-cell title="订阅" value="" />
-        <van-cell title="阅读记录" value="" label="" />
+        <van-cell title="浏览记录" value="" label="" @click="router.push('/records')"/>
       </van-cell-group>
     </div>
     <div style="background-color:  #dcdada; padding: 15px 0;">
@@ -54,15 +54,25 @@
 import bar from "../components/bar.vue";
 import router from "@/router";
 import { ref } from "vue";
+import { showToast } from "vant";
 
 const loggedIn = ref(false);
 const username = ref("");
-
+const wallet = ref('')
 // 页面加载时检查本地存储中是否存在登录状态
 if (window.sessionStorage.getItem("user")) {
   loggedIn.value = true;
   username.value = window.sessionStorage.getItem("user");
+  wallet.value = window.sessionStorage.getItem("wallet");
 }
+
+const news =()=>{
+  if(loggedIn.value){
+  router.push('/news')
+  }else{
+    showToast("请先登录");
+  }
+};
 
 const unlogin = () => {
   window.sessionStorage.removeItem("user");
