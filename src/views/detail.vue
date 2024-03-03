@@ -45,11 +45,13 @@ export default {
     return {
       id: this.$route.params.id,
       list: [],
+      record:[],
     };
   },
 
   mounted() {
     this.getInfo();
+    this.getRecord()
     console.log(this.id);
   },
 
@@ -86,6 +88,51 @@ export default {
           })
           .then((res) => {
             if ((res.data = "useid")) {
+              this.showToast('提示内容');
+              // 如果成功加入购物车
+              this.dialogMessage = "添加成功！";
+            } else {
+              this.dialogMessage = "添加失败！";
+            }
+          })
+          .catch((err) => {
+            console.log("加入收藏失败");
+          })
+          .finally(() => {
+            this.showDialog = true;
+          });
+      } else {
+        this.showToast = "您还未登录！";
+        this.showDialog = true;
+      }
+    },
+    onClickLeft() {
+      this.$router.go(-1);
+    },
+    getRecord(){
+      this.record.userid=window.sessionStorage.userid
+      //获取当前时间
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = this.formatTimeUnit(date.getMonth() + 1);
+      const day = this.formatTimeUnit(date.getDate());
+      const hours = this.formatTimeUnit(date.getHours());
+      const minutes = this.formatTimeUnit(date.getMinutes());
+      const seconds = this.formatTimeUnit(date.getSeconds());
+      this.record.creatTime=`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+      this.record.id=this.$route.params.id
+      console.log(this.record);
+      if (this.record.userid) {
+        // 添加userid和shopid的有效性验证
+        this.$axios
+          .post("http://localhost:3000/record/add", {
+            id:this.record.id,//书本id
+            userid:this.record.userid,
+            createTime:this.record.creatTime     
+          })
+          .then((res) => {
+            if ((res.data = "useid")) {
+              this.showToast('提示内容');
               // 如果成功加入购物车
               this.dialogMessage = "添加成功！";
             } else {
@@ -103,9 +150,10 @@ export default {
         this.showDialog = true;
       }
     },
-    onClickLeft() {
-      this.$router.go(-1);
-    },
+    formatTimeUnit(unit) {
+      // 将单个数字格式化为两位数，例如：1 -> '01', 12 -> '12'
+      return unit < 10 ? '0' + unit : unit;
+    }
   },
 };
 </script>
@@ -118,5 +166,3 @@ export default {
   line-height: 25px;
 }
 </style>
-
-

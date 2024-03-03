@@ -94,6 +94,7 @@ export default {
             showToast("登录成功");
             window.sessionStorage.setItem("user", foundUser.username);
             window.sessionStorage.setItem("userid", foundUser.userid);
+            window.sessionStorage.setItem("wallet", foundUser.wallet);
             router.push("/"); // 页面跳转到主页
           } else {
             showToast("用户名或密码错误");
