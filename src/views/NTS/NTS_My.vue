@@ -6,23 +6,28 @@
     </van-nav-bar>
     <van-cell v-for="item in bookList">
         <template #icon>
-            <div class="image-wrapper" @click="toPlay({title:item.title, img:item.img})">
+            <div class="image-wrapper" @click="toPlay({ title: item.title, img: item.img })">
                 <img :src="item.img" alt="">
             </div>
         </template>
         <template #title>
-            <div class="title" @click="toPlay({title:item.title, img:item.img})">
-                <span class="BookName">{{ item.title }}</span>
+            <div class="title" @click="toPlay({ title: item.title, img: item.img })">
+                <!-- <span class="BookName">{{ item.title }}</span> -->
+                <van-text-ellipsis class="BookName" :content="item.title" />
                 <span>全一章</span>
                 <span>{{ item.updatedAt }}</span>
             </div>
         </template>
         <template #right-icon>
+            <div class="right-icon" @click="triggerFileInput(item.title)">
+                <van-icon name="photo-o" size="30px" />
+            </div>
             <div class="right-icon" @click="deleteBook(item.title)">
                 <van-icon name="delete-o" size="30px" color="#FF4242" />
             </div>
         </template>
     </van-cell>
+    <input type="file" @change="handleFileChange" style="display: none" ref="fileInput">
 </template>
 <script setup>
 import { getCurrentInstance, ref, onMounted } from 'vue';
@@ -71,7 +76,7 @@ onMounted(() => {
     });
 });
 
-const toPlay = ({title, img}) => {
+const toPlay = ({ title, img }) => {
     router.push({
         path: '/NTS/NTS_Play',
         query: {
@@ -83,6 +88,74 @@ const toPlay = ({title, img}) => {
         }
     });
 }
+
+const fileInput = ref(null);
+let currentTitle = ref(''); // 用于存储当前选择上传图片的项目标题
+
+function triggerFileInput(title) {
+    currentTitle.value = title; // 保存当前标题
+    fileInput.value.click();
+}
+
+function handleFileChange(event) {
+    const files = event.target.files;
+    if (files.length > 0) {
+        const formData = new FormData();
+        formData.append('novelName', currentTitle.value);
+        formData.append('image', files[0]);
+
+        axios.post('/NTS/uploadImage', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then(res => {
+                console.log(res.data);
+                if (res.data.code == 200) {
+                    console.log('图片上传成功');
+                    // 根据需要更新书籍列表或执行其他操作
+                }
+            })
+            .catch(error => {
+                console.error('图片上传失败', error);
+            });
+    } else {
+        console.log('没有选择图片');
+    }
+    // 清空文件输入以允许再次上传同一文件
+    fileInput.value.value = null;
+}
+
+const changeImg = (title) => {
+    // 获取文件输入元素，这里假设你有一个ID为'imageInput'的文件输入
+    const imageInput = document.getElementById('imageInput');
+
+    if (imageInput.files.length > 0) {
+        const formData = new FormData();
+
+        // 添加小说名称和图片到FormData
+        formData.append('novelName', title);
+        formData.append('image', imageInput.files[0]); // 这里只上传第一个选中的文件
+
+        // 使用axios发送包含文件和标题的POST请求
+        axios.post('/NTS/uploadImage', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then(res => {
+            console.log(res.data);
+            if (res.data.code == 200) {
+                // 这里可以处理成功上传后的逻辑，例如更新书籍列表
+                console.log('图片上传成功');
+                bookList.value = bookList.value.filter(item => item.title != title);
+            }
+        }).catch(error => {
+            console.error('图片上传失败', error);
+        });
+    } else {
+        console.log('没有选择图片');
+    }
+};
 
 const deleteBook = (title) => {
     showConfirmDialog({
@@ -152,7 +225,7 @@ const deleteBook = (title) => {
         display: flex;
         justify-content: center;
         align-items: center;
-
+        margin-left: 10px;
     }
 }
 </style>
