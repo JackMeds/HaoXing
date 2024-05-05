@@ -11,51 +11,54 @@
     </form>
     <div v-if="bookList.length">
       <van-card
-      v-for="(item,index) in bookList"
-      :key="index"
-        tag="标签"
+        v-for="(item,index) in bookList"
+        :key="index"
         :desc="item.detail"
         :title="item.title"
-        thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
+        :thumb="`http://127.0.0.1:3000/uploads/cover/${item.img}`"
+        @click="$router.push(`/detail/${item.id}`)"
       />
     </div>
-    <div v-else><van-empty image="search" description="没有找到想要的" /></div>
+    <div v-else>
+      <van-empty image="search" description="没有找到想要的" />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HaoXingSearch",
+  name: 'HaoXingSearch',
 
   data() {
     return {
-      searchInfo: "",
+      searchInfo: '',
       bookList: [],
-    };
+    }
   },
 
-  mounted() {},
+  mounted() {
+  },
 
   methods: {
     onSearch() {
       this.$axios
-        .post("http://localhost:3000/newsList/list", {
+        .post('http://localhost:3000/newsList/list', {
           sous: this.searchInfo,
         })
         .then((res) => {
-          this.bookList = res.data;
-          console.log(this.bookList);
+          this.bookList = res.data
+          console.log(this.bookList)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
 
     onCancel() {
-        this.$router.push('/')
+      this.$router.push('/')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

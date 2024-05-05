@@ -5,6 +5,8 @@
   <router-view />
 </template>
 
-<style scoped>
-
+<style>
+::-webkit-scrollbar{
+  display: none;
+}
 </style>
