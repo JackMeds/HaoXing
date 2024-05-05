@@ -112,7 +112,8 @@
     </div>
 </template>
 <script setup>
-import AudioPlayer from '@liripeng/vue-audio-player';
+// import AudioPlayer from '@liripeng/vue-audio-player';
+import AudioPlayer from '@futuremeng/vue-audio-player';
 import { getCurrentInstance, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 

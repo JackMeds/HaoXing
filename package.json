@@ -1,6 +1,6 @@
 {
   "name": "vue-project",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,14 +11,21 @@
   "dependencies": {
     "@futuremeng/vue-audio-player": "^1.5.11",
     "axios": "^1.6.2",
+    "dayjs": "^1.11.10",
     "vant": "^4.8.3",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@unocss/preset-uno": "^0.58.5",
+    "@unocss/reset": "^0.58.5",
+    "@unocss/vite": "^0.58.5",
+    "@vant/auto-import-resolver": "^1.0.2",
     "@vitejs/plugin-vue": "^4.5.2",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
+    "unocss": "^0.58.5",
+    "unplugin-vue-components": "^0.26.0",
     "vite": "^5.0.10"
   }
 }

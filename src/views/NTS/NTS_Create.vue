@@ -296,10 +296,9 @@ const AIidentify = async () => {
         showRoleList.value = true;
         console.log(response.data);
         console.log(response.data.data);
-        // console.log(JSON.parse(response.data.data).content);
-        console.log(response.data.data.content);
-        PreProcess.value = response.data.data;
-        response.data.data.content.forEach((elm) => {
+        console.log(JSON.parse(response.data.data).content);
+        PreProcess.value = JSON.parse(response.data.data);
+        JSON.parse(response.data.data).content.forEach((elm) => {
             highlightContent.value.push(elm.text);
         });
         normalNovel.value = false;

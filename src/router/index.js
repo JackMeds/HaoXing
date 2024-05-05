@@ -1,22 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import one from '../views/one.vue'
-import three from "@/views/three.vue";
-import four from "@/views/four.vue";
-import setting from "@/views/setting.vue";
-import login from "@/views/login.vue";
-import search from "@/views/search.vue";
+import three from '@/views/three.vue'
+import four from '@/views/four.vue'
+import setting from '@/views/setting.vue'
+import login from '@/views/login.vue'
+import search from '@/views/search.vue'
 import detail from '@/views/detail.vue'
-import read from "@/views/read.vue"
-import news from "@/views/news.vue"
-import records from "@/views/records.vue"
+import read from '@/views/read.vue'
+import records from '@/views/records.vue'
+import wallet from '@/views/wallet.vue'
+import upload from '@/views/upload.vue'
+import RecommendDetail from '@/views/recommend/detail.vue'
+
 
 //NTS
-import NTS_Index from "@/views/NTS/NTS_Index.vue";
-import NTS_Home from "@/views/NTS/NTS_Home.vue";
-import NTS_Create from "@/views/NTS/NTS_Create.vue";
-import NTS_My from "@/views/NTS/NTS_My.vue";
-import NTS_Search from "@/views/NTS/NTS_Search.vue";
-import NTS_Play from "@/views/NTS/NTS_Play.vue";
+import NTS_Index from '@/views/NTS/NTS_Index.vue'
+import NTS_Home from '@/views/NTS/NTS_Home.vue'
+import NTS_Create from '@/views/NTS/NTS_Create.vue'
+import NTS_My from '@/views/NTS/NTS_My.vue'
+import NTS_Search from '@/views/NTS/NTS_Search.vue'
+import NTS_Play from '@/views/NTS/NTS_Play.vue'
 
 
 const router = createRouter({
@@ -90,11 +93,6 @@ const router = createRouter({
       component: detail
     },
     {
-      path: '/news',
-      name: 'news',
-      component: news
-    },
-    {
       // path: '/detail/:id',
       path: '/read',
       name: 'read',
@@ -105,6 +103,21 @@ const router = createRouter({
       name: 'records',
       component: records
     },
+    {
+      path: '/wallet',
+      name: 'wallet',
+      component: wallet
+    },
+    {
+      path: '/recommend/:id',
+      name: 'recommend-detail',
+      component: RecommendDetail
+    },
+    {
+      path: '/upload',
+      name: 'upload',
+      component: upload
+    }
   ]
 })
 
