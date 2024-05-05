@@ -13,7 +13,7 @@
         <van-tab title="收藏">
             <div class="book-list">
                 <div class="book-list-item" v-for="item in collectBookList" :key="item.id">
-                    <div class="image-wrapper" @click="toPlay(item.title)">
+                    <div class="image-wrapper" @click="toPlay({ title: item.title, NovelImg: item.img })">
                         <img :src="item.img" alt="">
                     </div>
                     <p>{{ item.title }}</p>
