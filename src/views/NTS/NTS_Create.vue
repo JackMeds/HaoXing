@@ -81,16 +81,36 @@
     </div>
 </template>
 <script setup>
-import { getCurrentInstance, ref } from 'vue';
+import { getCurrentInstance, ref, onMounted } from 'vue';
 import { showConfirmDialog } from 'vant';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
 const instance = getCurrentInstance();
 const axios = instance.appContext.config.globalProperties.$axios;
 
-//打开小说列表
+// 获取动态声线列表
+const SoundList = ref([]);
+
+// 加载声线列表
+const loadSoundList = async () => {
+    try {
+        const response = await axios.get('/NTS/getSoundList');
+        console.log(response.data.data);
+        SoundList.value = response.data.data.map((sound) => ({
+            voice: sound.voice,
+            rgb: sound.rgb,
+            name: sound.name,
+            listen: sound.listen,
+        }));
+    } catch (error) {
+        console.error('Failed to load sound list:', error);
+    }
+};
+
+// 在组件加载时获取声线
+onMounted(loadSoundList);
+
 const showNovelList = ref(false);
 const showNovel = ref(false);
 const NovelColumns = [];
@@ -104,7 +124,6 @@ const onConfirmNovel = ({ selectedValues }) => {
             novelName: selectedValues[0]
         }
     }).then((response) => {
-        console.log(response.data.data);
         novel.value = {
             novelID: 0,
             chapterID: 0,
@@ -113,7 +132,6 @@ const onConfirmNovel = ({ selectedValues }) => {
             content: response.data.data.data
         };
         showNovel.value = true;
-        console.log(novel.value);
     }).catch((error) => {
         console.log(error);
     });
@@ -123,7 +141,6 @@ const onCancelNovelList = () => {
 };
 const openNovelList = () => {
     axios.get('/NTS/getnovellist').then((response) => {
-        console.log(response.data);
         response.data.data.data.forEach((elm) => {
             NovelColumns.push({
                 text: elm,
@@ -136,7 +153,6 @@ const openNovelList = () => {
     });
 };
 
-//预处理数据
 const PreProcess = ref({
     novelID: 0,
     chapterID: 0,
@@ -146,109 +162,24 @@ const PreProcess = ref({
     Roles: []
 });
 
-// 声音列表
-var SoundList = [
-    {
-        voice: "zh-CN-Xiaoxiao",
-        rgb: "rgb(255, 192, 203)",
-        name: "小晓-中国大陆",
-        listen: "/voice/pure_zh-CN-Xiaoxiao.mp3",
-    },
-    {
-        voice: "zh-CN-Xiaoyi",
-        rgb: "rgb(173, 216, 230)",
-        name: "小艺-中国大陆",
-        listen: "/voice/pure_zh-CN-Xiaoyi.mp3",
-    },
-    {
-        voice: "zh-CN-Yunjian",
-        rgb: "rgb(255, 255, 224)",
-        name: "云健-中国大陆",
-        listen: "/voice/pure_zh-CN-Yunjian.mp3",
-    },
-    {
-        voice: "zh-CN-Yunxi",
-        rgb: "rgb(144, 238, 144)",
-        name: "云曦-中国大陆",
-        listen: "/voice/pure_zh-CN-Yunxi.mp3",
-    },
-    {
-        voice: "zh-CN-Yunxia",
-        rgb: "rgb(152, 251, 152)",
-        name: "云霞-中国大陆",
-        listen: "/voice/pure_zh-CN-Yunxia.mp3",
-    },
-    {
-        voice: "zh-CN-Yunyang",
-        rgb: "rgb(230, 230, 250)",
-        name: "云阳-中国大陆",
-        listen: "/voice/pure_zh-CN-Yunyang.mp3",
-    },
-    {
-        voice: "zh-HK-HiuGaai",
-        rgb: "rgb(255, 228, 181)",
-        name: "曉佳-中国香港",
-        listen: "/voice/pure_zh-HK-HiuGaai.mp3",
-    },
-    {
-        voice: "zh-HK-HiuMaan",
-        rgb: "rgb(211, 211, 211)",
-        name: "曉文-中国香港",
-        listen: "/voice/pure_zh-HK-HiuMaan.mp3",
-    },
-    {
-        voice: "zh-HK-WanLung",
-        rgb: "rgb(240, 230, 140)",
-        name: "雲龍-中国香港",
-        listen: "/voice/pure_zh-HK-WanLung.mp3",
-    },
-    {
-        voice: "zh-TW-HsiaoChen",
-        rgb: "rgb(224, 255, 255)",
-        name: "小真-中国台湾",
-        listen: "/voice/pure_zh-TW-HsiaoChen.mp3",
-    },
-    {
-        voice: "zh-TW-YunJhe",
-        rgb: "rgb(240, 255, 240)",
-        name: "雲哲-中国台湾",
-        listen: "/voice/pure_zh-TW-YunJhe.mp3",
-    },
-    {
-        voice: "zh-TW-HsiaoYu",
-        rgb: "rgb(240, 128, 128)",
-        name: "小玉-中国台湾",
-        listen: "/voice/pure_zh-TW-HsiaoYu.mp3",
-    },
-];
-
-const novel = ref(
-    {
-        novelID: 0,
-        chapterID: 0,
-        name: '',
-        chapter: '',
-        content: ''
-    }
-);
-
-
+const novel = ref({
+    novelID: 0,
+    chapterID: 0,
+    name: '',
+    chapter: '',
+    content: ''
+});
 
 const onClickLeft = () => history.back();
-
 const tabs_active = ref(0);
-
 const highlightContent = ref(['']);
-
 const normalNovel = ref(true);
 
-//Choose Default Voice
 const showDefaultVoice = ref(false);
-
 const DefaultVoiceColumns = [];
-
 const showDefault = () => {
-    SoundList.forEach((elm) => {
+    DefaultVoiceColumns.splice(0, DefaultVoiceColumns.length);
+    SoundList.value.forEach((elm) => {
         DefaultVoiceColumns.push({
             text: elm.name,
             value: elm.voice
@@ -262,15 +193,14 @@ const defaultVoiceValue = ref('');
 
 const onConfirmDefaultVoice = ({ selectedValues }) => {
     defaultVoiceValue.value = selectedValues[0];
-    defaultVoice.value = SoundList.find(elm => elm.voice === selectedValues[0])?.name || '';
+    defaultVoice.value = SoundList.value.find(elm => elm.voice === selectedValues[0])?.name || '';
     showDefaultVoice.value = false;
 };
 const onCancelDefaultVoice = () => {
     showDefaultVoice.value = false;
 };
 
-
-//AI identify
+// AI identify
 const showInputKey = ref(false);
 const showLoading = ref(false);
 const showRoleList = ref(false);
@@ -294,10 +224,6 @@ const AIidentify = async () => {
         });
         showLoading.value = false;
         showRoleList.value = true;
-        console.log(response.data);
-        console.log(response.data.data);
-        // console.log(JSON.parse(response.data.data).content);
-        console.log(response.data.data.content);
         PreProcess.value = response.data.data;
         response.data.data.content.forEach((elm) => {
             highlightContent.value.push(elm.text);
@@ -309,13 +235,14 @@ const AIidentify = async () => {
     }
 };
 
-//Set Voice
+// Set Voice
 const showVoice = ref(false);
 const VoiceColumns = [];
 const temporaryID = ref('');
 
 const setVoice = (RoleID) => {
-    SoundList.forEach((elm) => {
+    VoiceColumns.splice(0, VoiceColumns.length);
+    SoundList.value.forEach((elm) => {
         VoiceColumns.push({
             text: elm.name,
             value: elm.voice
@@ -324,17 +251,17 @@ const setVoice = (RoleID) => {
     showVoice.value = true;
     temporaryID.value = RoleID;
 };
+
 const onConfirmVoice = ({ selectedValues }) => {
     showVoice.value = false;
     PreProcess.value.Roles.forEach((elm) => {
         if (elm.RoleID === temporaryID.value) {
             elm.voice = selectedValues[0];
-            elm.voiceName = SoundList.find(elm => elm.voice === selectedValues[0])?.name || '';
-            elm.rgb = SoundList.find(elm => elm.voice === selectedValues[0])?.rgb || '';
+            elm.voiceName = SoundList.value.find(elm => elm.voice === selectedValues[0])?.name || '';
+            elm.rgb = SoundList.value.find(elm => elm.voice === selectedValues[0])?.rgb || '';
         }
     });
     temporaryID.value = '';
-    console.log(PreProcess.value);
 };
 
 const onCancelVoice = () => {
@@ -381,6 +308,7 @@ const doProcess = async () => {
         console.log(error);
     }
 };
+
 //NTS
 const doNTS = async () => {
     showLoading.value = true;
@@ -444,6 +372,7 @@ const reset = () => {
         });
 };
 </script>
+
 <style scoped lang="scss">
 .pre-line {
     white-space: pre-wrap;
