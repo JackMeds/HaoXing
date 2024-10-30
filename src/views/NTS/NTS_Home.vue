@@ -1,7 +1,7 @@
 <template lang="html">
     <NTS_HomeNav></NTS_HomeNav>
     <NTS_BookList :bookList="bookList"></NTS_BookList>
-    <bar :placeholder="true"></bar>
+    <!-- <bar :placeholder="true"></bar> -->
 </template>
 <script setup>
 import bar from '@/components/bar.vue'

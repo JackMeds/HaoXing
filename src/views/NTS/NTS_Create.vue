@@ -275,7 +275,7 @@ const showInputKey = ref(false);
 const showLoading = ref(false);
 const showRoleList = ref(false);
 
-const APIKey = ref('');
+const APIKey = ref('sk-EsGDy3eKNxWSkplz20DcB55eA5284eFa8b56A526C5414eE1');
 
 const inputKey = () => {
     showInputKey.value = true;
