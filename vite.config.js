@@ -14,7 +14,8 @@ export default defineConfig({
     }
   },
   server: {
-    port: 8082
+    host: '192.168.0.11',
+    port: 8082, // 你可以根据需要更改端口号
   },
   css: {
     preprocessorOptions: {
