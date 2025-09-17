@@ -1,6 +1,7 @@
-# vue-project
-
-This template should help get you started developing with Vue 3 in Vite.
+## Note: 
+This project is for the frontend only. Check the links below for the BMS and backend.
+[HaoXing-BMS](https://github.com/JackMeds/HaoXing-BMS)
+[HaoXing-server](https://github.com/JackMeds/HaoXing-server)
 
 ## Recommended IDE Setup
 
