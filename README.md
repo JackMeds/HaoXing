@@ -1,7 +1,5 @@
 ## Note: 
-This project is for the frontend only. Check the links below for the BMS and backend.
-[HaoXing-BMS](https://github.com/JackMeds/HaoXing-BMS)
-[HaoXing-server](https://github.com/JackMeds/HaoXing-server)
+This project is for the frontend only. Check to find [HaoXing-BMS](https://github.com/JackMeds/HaoXing-BMS) and [HaoXing-server](https://github.com/JackMeds/HaoXing-server).
 
 ## Recommended IDE Setup
 
