@@ -1,0 +1,14 @@
+[
+  { "voice": "zh-CN-Xiaoxiao", "rgb": "rgb(255, 192, 203)", "name": "小晓 (中国大陆)" },
+  { "voice": "zh-CN-Xiaoyi", "rgb": "rgb(173, 216, 230)", "name": "小艺 (中国大陆)" },
+  { "voice": "zh-CN-Yunjian", "rgb": "rgb(255, 255, 224)", "name": "云健 (中国大陆)" },
+  { "voice": "zh-CN-Yunxi", "rgb": "rgb(144, 238, 144)", "name": "云曦 (中国大陆)" },
+  { "voice": "zh-CN-Yunxia", "rgb": "rgb(152, 251, 152)", "name": "云霞 (中国大陆)" },
+  { "voice": "zh-CN-Yunyang", "rgb": "rgb(230, 230, 250)", "name": "云阳 (中国大陆)" },
+  { "voice": "zh-HK-HiuGaai", "rgb": "rgb(255, 228, 181)", "name": "曉佳 (香港)" },
+  { "voice": "zh-HK-HiuMaan", "rgb": "rgb(211, 211, 211)", "name": "曉文 (香港)" },
+  { "voice": "zh-HK-WanLung", "rgb": "rgb(240, 230, 140)", "name": "雲龍 (香港)" },
+  { "voice": "zh-TW-HsiaoChen", "rgb": "rgb(224, 255, 255)", "name": "小真 (台湾)" },
+  { "voice": "zh-TW-YunJhe", "rgb": "rgb(240, 255, 240)", "name": "雲哲 (台湾)" },
+  { "voice": "zh-TW-HsiaoYu", "rgb": "rgb(240, 128, 128)", "name": "小玉 (台湾)" }
+]

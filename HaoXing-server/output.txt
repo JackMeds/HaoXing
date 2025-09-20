@@ -1,0 +1,23 @@
+{
+  "id": "chatcmpl-8hGBjZ2NSWrbbY7aAq6DZ69hDGUnf",
+  "object": "chat.completion",
+  "created": 1705321023,
+  "model": "gpt-4-1106-preview",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n{\n  \"Roles\":[\n    {\"RoleID\":\"1\",\"RoleName\":\"秦诚\"},\n    {\"RoleID\":\"2\",\"RoleName\":\"王煊\"}\n  ],\n  \"content\":[\n    {\"RoleID\":\"1\",\"RoleName\":\"秦诚\",\"text\":\"这种旧时代的东西，你真的练成了？\"},\n    {\"RoleID\":\"2\",\"RoleName\":\"王煊\",\"text\":\"按照就旧时代的说法，我这些不算什么。\"},\n    {\"RoleID\":\"1\",\"RoleName\":\"秦诚\",\"text\":\"你别拿过去来比较，我压根就没相信过，事实上，那些记载许多都早已被证伪。\"}\n  ]\n}\n```"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2721,
+    "completion_tokens": 189,
+    "total_tokens": 2910
+  },
+  "system_fingerprint": "fp_168383a679"
+}

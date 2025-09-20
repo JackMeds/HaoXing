@@ -1,31 +1,42 @@
-# Project Introduction: Novel-to-Audio Drama Converter
-This is a Vue 3 mobile application designed to convert written novels into multi-character audio dramas.
+# HaoXing Platform
 
-## Note: 
-This project is for the frontend only. Check to find [HaoXing-BMS](https://github.com/JackMeds/HaoXing-BMS) and [HaoXing-server](https://github.com/JackMeds/HaoXing-server).
+This repository contains the HaoXing application suite, including the customer-facing web frontend, the back-office management system, and the Node.js backend API. A MySQL database and Docker-based tooling are included so the entire stack can be deployed with a single script.
 
-## Recommended IDE Setup
+## Repository Layout
+- `HaoXing/` – Vite-based frontend that serves the main HaoXing experience
+- `HaoXing-BMS/` – Vue-powered back-office (BMS) dashboard
+- `HaoXing-server/` – Node.js/Express API for the platform
+- `Deployment/` – Docker Compose definition and helper script used to build and start the stack
+- `package.sh` – Utility script that exports production-ready Docker images and an installation bundle
+- `old/` – Snapshot of the previous contents of this repository for reference
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Prerequisites
+- Docker (tested with Docker 24+)
+- Docker Compose plugin
 
-## Customize configuration
+## Deploy with Docker
+1. Make sure Docker is running.
+2. Execute the deployment script:
+   ```bash
+   chmod +x Deployment/build.sh
+   ./Deployment/build.sh
+   ```
+   The script builds all service images and starts them with Docker Compose. When it completes, the services are available at:
+   - Frontend: http://localhost:8082
+   - BMS Dashboard: http://localhost:8081
+   - API: http://localhost:3000
+   The MySQL database runs on port 3306 with credentials defined in `Deployment/docker-compose.yml`.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+To stop the stack, run `docker-compose -f Deployment/docker-compose.yml down`.
 
-## Project Setup
-
-```sh
-npm install
+## Packaging for Distribution
+If you need to distribute pre-built images, run the packaging script from the repository root:
+```bash
+chmod +x package.sh
+./package.sh
 ```
+This builds the images, exports them as tar archives, and generates `haoxing_release.tar.gz` containing everything required to install the stack on another host.
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+## Additional Notes
+- Update environment variables and credentials in `Deployment/docker-compose.yml` before deploying to production.
+- The scripts assume local execution with sufficient Docker permissions. Run them with `sudo` if your environment requires elevated privileges.

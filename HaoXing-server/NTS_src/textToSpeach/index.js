@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.voiceNames = exports.splitText = exports.extractText = exports.textToAudio = exports.readForMe = void 0;
+var readForMe_js_1 = require("./readForMe.js");
+Object.defineProperty(exports, "readForMe", { enumerable: true, get: function () { return readForMe_js_1.readForMe; } });
+var textToAudio_js_1 = require("./textToAudio.js");
+Object.defineProperty(exports, "textToAudio", { enumerable: true, get: function () { return textToAudio_js_1.textToAudio; } });
+var extractText_js_1 = require("./extractText.js");
+Object.defineProperty(exports, "extractText", { enumerable: true, get: function () { return extractText_js_1.extractText; } });
+var splitText_js_1 = require("./splitText.js");
+Object.defineProperty(exports, "splitText", { enumerable: true, get: function () { return splitText_js_1.splitText; } });
+var voiceNames_js_1 = require("./voiceNames.js");
+Object.defineProperty(exports, "voiceNames", { enumerable: true, get: function () { return voiceNames_js_1.voiceNames; } });
